@@ -27,7 +27,7 @@ const createUser = async (req, res = response) => {
         const passwordEncriptada = bcrypt.hashSync(password, salt);
 
         // Guardar usuario en BD usando Prisma
-        const usuario = await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 ...req.body,
                 password: passwordEncriptada,
@@ -35,12 +35,12 @@ const createUser = async (req, res = response) => {
         });
 
         // Generar el JWT
-        const token = await generarJWT(usuario.id, usuario.name);
+        const token = await generarJWT(user.id, user.name);
 
         res.json({
             ok: true,
             msg: 'register',
-            usuario,
+            user,
             token
         });
     } catch (error) {
@@ -84,7 +84,7 @@ const loginUser = async (req, res = response) => {
         res.json({
             ok: true,
             msg: 'login',
-            usuario: usuarioDB,
+            user: usuarioDB,
             token
         });
     } catch (error) {
@@ -105,13 +105,13 @@ const revalidarToken = async (req, res = response) => {
     const token = await generarJWT(uid, name);
 
     //Obtener el usuario por el uid con Prisma
-    const usuario = await prisma.user.findUnique({ where: { id: uid } });
+    const user = await prisma.user.findUnique({ where: { id: uid } });
 
     res.json({
         ok: true,
         msg: 'renew',
         token,
-        usuario
+        user
     });
 };
 
