@@ -36,6 +36,23 @@ const getTaskByIdUser = async (req, res = response) => {
   }
 }
 
+// Obtener una tarea por ID
+const getTaskById = async (req, res = response) => {
+  const { id } = req.params;
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: Number(id) }
+    });
+    res.json({
+      ok: true,
+      msg: 'Task fetched',
+      task
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching task' });
+  }
+};
+
 //Crear una tarea
 const createTask = async (req, res = response) => {
 
@@ -44,7 +61,6 @@ const createTask = async (req, res = response) => {
   // Verificar si el usuario existe
   const usuarioDB = await prisma.user.findUnique({ where: { id: userId } });
 
-  console.log(usuarioDB);
   if (!usuarioDB) {
     return res.status(404).json({
       ok: false,
@@ -109,6 +125,7 @@ const deleteTask = async (req, res = response) => {
 module.exports = {
   getTasks,
   getTaskByIdUser,
+  getTaskById,
   createTask,
   updateTask,
   deleteTask

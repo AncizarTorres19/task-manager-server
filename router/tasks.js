@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 // Controllers
-const { getTasks, getTaskByIdUser, createTask, updateTask, deleteTask } = require('../controllers/tasks');
+const { getTasks, getTaskByIdUser, getTaskById, createTask, updateTask, deleteTask } = require('../controllers/tasks');
 
 // Middlewares
 const { validarJWT } = require('../middlewares/validar-jwt');
@@ -15,6 +15,9 @@ router.get('/', validarJWT, getTasks);
 
 //Obtener una tarea por id
 router.get('/:id', validarJWT, getTaskByIdUser);
+
+// Obtener una tarea por ID
+router.get('/by-id/:id', validarJWT, getTaskById);
 
 //Crear una tarea
 router.post('/', [
